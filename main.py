@@ -1,18 +1,11 @@
 #pgzero
 
 """
-Version actual: [M7.L1 · Actividad #5: "Atributos"]
-Objetivo del ejercicio: Familiarizarnos con los atributos agregand salud y ataque a nuestro personaje
-> Creamos nuestro personaje como un objeto Actor() con sus respectivos atributos y los mostramos por pantalla
-
-NOTA: La actividad #4 fue resuelta con el código de la actividad #3
+Version actual: [M7.L1 · Actividad #6: "Desplazamiento a través de las celdas"]
+Objetivo del ejercicio: Implementar nuestro sistema de movimiento (por casillas/por turnos)
 
 Pasos:
-#1: Creamos Actor() personaje
-#2: Le damos sus atributos
-#3: Eliminamos update() y modificamos nuestra función draw()
-
-Nota: en el próximo ejercicio es que se crean los actores para dibujar
+#1: Agregamos nuestra función on_key_down(key)
 
 Kodland: https://kenney.nl/assets/roguelike-caves-dungeons
 packs de assets: https://kenney.nl/assets/series:Tiny?sort=update
@@ -125,3 +118,22 @@ def draw():
     # Mostramos valores personaje:
     screen.draw.text(("PS: " + str(personaje.salud)), midright=((WIDTH - 15), 14), color = 'white', fontsize = 16)
     screen.draw.text(("ATK: " + str(personaje.ataque)), midright=((WIDTH - 15), 36), color = 'white', fontsize = 16)
+
+
+def on_key_down(key):
+  
+  if ((keyboard.right or keyboard.d) and (personaje.x < (WIDTH - celda.width * 2))):
+    # ¿Xq 2?: Una (a la que me voy a desplazar) y otra (por la pared, que NO puedo atravesar)
+    personaje.x += celda.width
+    personaje.image = "stand" # xq stand mira a la dcha
+        
+  elif ((keyboard.left or keyboard.a) and (personaje.x > (celda.width * 2))):
+    personaje.x -= celda.width
+    personaje.image = "left" # xq mira a la izq
+        
+  elif ((keyboard.down or keyboard.s) and (personaje.y < HEIGHT - celda.height * 2)):
+    # ¿Xq 2?: Una (a la que me voy a desplazar) y otra (por la pared, que NO puedo atravesar)
+    personaje.y += celda.height
+    
+  elif ((keyboard.up or keyboard.w) and (personaje.y > (celda.height * 2))):
+        personaje.y -= celda.height
