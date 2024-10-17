@@ -2,17 +2,15 @@
 import random
 
 """
-Version actual: [M7.L2 · Actividad #2 "Generando enemigos"]
-NOTA: La Actividad # 1 es actualizar el mapa de sueños
-Objetivo del ejercicio: Agregar generación aleatoria de enemigos con atributos randomizados
+Version actual: [M7.L2 · Actividad #3: "Método Collidelist"]
+Objetivo: Agregar colisiones y daño entre personajes
 
 Pasos:
-#1: Importar random
-#2: creamos una constante que determine la cantidad de enemigos a spawnear (5)
-#3: Creamos un bucle FOR donde calculamos la posición, la validamos, creamos los actores enemigos y les asignamos su salud y ataque con valores randomizados
-#4: Agregamos un bucle FOR en nuestro draw() para mostrar los enemigos en pantalla
+#1: Crear una variable donde almacenar la info de colisiones
+#2: Después de mover al personaje, actualizamos nuestro valor de colisiones
+#3: En caso de colisión, calculamos los daños y actualizamos los valores
 
-Nota: Pronto calcularemos las colisiones contra ellos
+Nota: Se resta salud, más TODAVÍA no eliminamos enemigos
 
 Kodland: https://kenney.nl/assets/roguelike-caves-dungeons
 packs de assets: https://kenney.nl/assets/series:Tiny?sort=update
@@ -54,6 +52,7 @@ personaje.ataque = 5
 
 ################## VARIABLES ##################
 CANT_ENEMIGOS_A_SPAWNEAR = 5
+colision = -2 # ¿XQ -2 como valor inicial?: porque es un valor que NO nos puede devolver collidelist.
 
 # Listas:
 lista_enemigos = []
@@ -164,7 +163,8 @@ def draw():
     screen.draw.text(("Salud: " + str(personaje.salud)), midleft=(30, (HEIGHT - int(celda.height/2))), color = 'white', fontsize = 24)
     screen.draw.text(("Ataque: " + str(personaje.ataque)), midright=((WIDTH - 30), (HEIGHT - int(celda.height/2))), color = 'white', fontsize = 24)
 
-
+    # To-do: porgramar victoria (eliminar a todos los enemigos) y derrota (personaje.salud <= 0)
+    
 def on_key_down(key):
   
   if ((keyboard.right or keyboard.d) and (personaje.x < (WIDTH - celda.width * 2))):
@@ -182,3 +182,13 @@ def on_key_down(key):
     
   elif ((keyboard.up or keyboard.w) and (personaje.y > (celda.height * 2))):
         personaje.y -= celda.height
+
+################## COLISIONES ##################
+
+  colision = personaje.collidelist(lista_enemigos)
+
+  if (colision != -1):
+      # Si hubo colisión con un enemigo:
+      enemigo_atacado = lista_enemigos[colision]
+      enemigo_atacado.salud -= personaje.ataque
+      personaje.salud -= enemigo_atacado.ataque
