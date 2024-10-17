@@ -2,18 +2,14 @@
 import random
 
 """
-Version actual: [M7.L2 · Actividad #4: "Aparición de las bonificaciones"]
-Objetivo: Agregar mecánicas de bonus, su spawn, mostrarlas por pantalla
+Version actual: [M7.L2 · Actividad #5: "Recolectando bonificaciones"]
+Objetivo: Agregar colisiones de los bonus e implementamos sus efectos
+Próximo:  (Actividad extra) Game over
 
 Pasos:
-#1: Crear una nueva lista para los bonus
-#2: Durante la creación de enemigos vamos a asignarles un valor de bonus que dropearán tras ser derrotados
-#3: Agregar una condición en draw para dibujar los bonus en pantalla
-#4: Al derrotar a un enemigo, spawnearemos el bonus que se le asignó al crearlo
+#1: Modificar la función de colisiones
 
 Nota: TODAVÍA NO HAY GAME OVER
-
-Próximo: Agregar colisiones con los bonus
 
 Kodland: https://kenney.nl/assets/roguelike-caves-dungeons
 packs de assets: https://kenney.nl/assets/series:Tiny?sort=update
@@ -227,3 +223,15 @@ def on_key_down(key):
           # Método #2:
           lista_enemigos.remove(enemigo_atacado)
           # To-do: agregar pila de huesitos en la casilla donde derrote al esqueleto
+
+  else: # Si NO hay colisión con enemigo:
+      
+      """ >>> COLISIONES CON BONUS <<< """
+      for bonus in lista_bonus:
+          if personaje.colliderect(bonus):
+              # Si hubo colisión contra un bonus:
+              if (bonus.image == "heart"):
+                  personaje.salud += 15
+              elif (bonus.image == "sword"):
+                  personaje.ataque += 5
+              lista_bonus.remove(bonus)
